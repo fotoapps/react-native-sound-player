@@ -15,6 +15,10 @@ module.exports = {
     RNSoundPlayer.playSoundFile(name, type)
   },
 
+  playLocalSoundFile: (name: string, type: string) => {
+    RNSoundPlayer.playLocalSoundFile(name, type)
+  },
+
   playUrl: (url: string) => {
     RNSoundPlayer.playUrl(url)
   },

@@ -45,6 +45,12 @@ public class RNSoundPlayerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void playLocalSoundFile(String name, String type) throws IOException {
+        mountSoundFileFromFilesDir(name, type);
+        this.mediaPlayer.start();
+    }
+
+    @ReactMethod
     public void loadSoundFile(String name, String type) throws IOException {
         mountSoundFile(name, type);
     }
@@ -118,6 +124,25 @@ public class RNSoundPlayerModule extends ReactContextBaseJavaModule {
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
+    }
+
+    private void mountSoundFileFromFilesDir(String name, String type) throws IOException {
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+
+            this.mediaPlayer.setOnCompletionListener(
+                    new OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer arg0) {
+                            WritableMap params = Arguments.createMap();
+                            params.putBoolean("success", true);
+                            sendEvent(getReactApplicationContext(), EVENT_FINISHED_PLAYING, params);
+                        }
+                    });
+        }
+        mediaPlayer.reset();
+        mediaPlayer.setDataSource(reactContext, getUriFromFile(name, type));
+        mediaPlayer.prepare();
     }
 
     private void mountSoundFile(String name, String type) throws IOException {
