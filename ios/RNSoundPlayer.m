@@ -28,6 +28,11 @@ RCT_EXPORT_METHOD(playSoundFile:(NSString *)name ofType:(NSString *)type) {
     [self.player play];
 }
 
+RCT_EXPORT_METHOD(playLocalSoundFile:(NSString *)name ofType:(NSString *)type) {
+    [self mountSoundFile:name ofType:type];
+    [self.player play];
+}
+
 
 RCT_EXPORT_METHOD(loadSoundFile:(NSString *)name ofType:(NSString *)type) {
     [self mountSoundFile:name ofType:type];
